@@ -38,22 +38,23 @@ pipeline {
                 bat "mvn test"
             }
         }
-	 stage("Start Services (PostgreSQL, SonarQube)") {
+	    
+        stage("SonarQube Analysis"){
+           steps {
+	           script {
+		        withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') { 
+                        sh "mvn sonar:sonar"
+		        }
+	           }	
+           }
+       }
+
+	stage("Start Services PostgreSQL") {
       		steps {
-        	     bat 'docker-compose up -d' // this runs the YAML
+        	     bat 'docker-compose up -d' 
       	      	}
     	}
-
 	    
- //        stage("SonarQube Analysis"){
- //           steps {
-	//            script {
-	// 	        withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') { 
- //                        sh "mvn sonar:sonar"
-	// 	        }
-	//            }	
- //           }
- //       }
 	// stage("Quality Gate"){
  //           steps {
  //               script {
