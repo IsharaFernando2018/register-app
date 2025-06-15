@@ -38,6 +38,13 @@ pipeline {
                 bat "mvn test"
             }
         }
+	 stage("Start Services (PostgreSQL, SonarQube)") {
+      		steps {
+        	     bat 'docker-compose up -d' // this runs the YAML
+      	      	}
+    	}
+
+	    
  //        stage("SonarQube Analysis"){
  //           steps {
 	//            script {
