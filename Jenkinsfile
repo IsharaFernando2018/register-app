@@ -49,6 +49,13 @@ pipeline {
            }
        }
 
+	stage("Cleanup Old Containers") {
+    		steps {
+        		bat 'docker-compose down --remove-orphans || exit 0'
+    		}
+	}
+
+
 	stage("Start Services PostgreSQL") {
       		steps {
         	     bat 'docker-compose up -d' 
