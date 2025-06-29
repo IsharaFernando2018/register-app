@@ -137,13 +137,13 @@ pipeline {
 
         stage("Build Application") {
             steps {
-                bat "mvn clean package"
+                sh "mvn clean package"
             }
         } 
 
 	stage("Test Application") {
             steps {
-                bat "mvn test"
+                sh "mvn test"
             }
         }
 
@@ -151,7 +151,7 @@ pipeline {
            steps {
 	        script {
 			withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') { 
-                        bat "mvn sonar:sonar"
+                        sh "mvn sonar:sonar"
 		        }
 	        }	
            }
