@@ -135,7 +135,7 @@ pipeline {
     		DOCKER_CREDENTIALS = 'dockerhub'  // your Jenkins credentials ID for Docker Hub
     		APP_NAME = "update-register-app-pipeline"
     		RELEASE = "1.0.0"
-    		IMAGE_NAME = "${env.DOCKER_USER}/${APP_NAME}"  // or hardcode user if needed
+    		IMAGE_NAME = "ferdi2018/update-register-app-pipeline"
     		IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
 	}
 
