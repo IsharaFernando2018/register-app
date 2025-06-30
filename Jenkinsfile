@@ -8,7 +8,7 @@
 // 	    APP_NAME = "register-app-pipeline"
 //             RELEASE = "1.0.0"
 //             DOCKER_USER = "ferdi2018"
-//             DOCKER_PASS = 'dockerhub'
+//             //DOCKER_PASS = 'dockerhub'
 //             IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
 //             IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
 // 	    // JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
@@ -122,15 +122,22 @@ pipeline {
         maven 'Maven3'
     }
 
-    environment {
-	APP_NAME = "update-register-app-pipeline"
-        RELEASE = "1.0.0"
-        DOCKER_USER = "ferdi2018"
-        DOCKER_PASS = 'dockerhub'
-        IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
-        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
-	// JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
-    }
+ //    environment {
+	// APP_NAME = "update-register-app-pipeline"
+ //        RELEASE = "1.0.0"
+ //        DOCKER_USER = "ferdi2018"
+ //        DOCKER_PASS = 'dockerhub'
+ //        IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+ //        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+	// // JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
+ //    }
+	environment {
+    		DOCKER_CREDENTIALS = 'dockerhub'  // your Jenkins credentials ID for Docker Hub
+    		APP_NAME = "update-register-app-pipeline"
+    		RELEASE = "1.0.0"
+    		IMAGE_NAME = "${env.DOCKER_USER}/${APP_NAME}"  // or hardcode user if needed
+    		IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+	}
 
     stages {
         stage("Cleanup Workspace") {
@@ -190,17 +197,17 @@ pipeline {
  //            }
  //       }
 	    stage("Build & Push Docker Image") {
-    agent { label 'docker-agent2' }  // 👈 Run this stage only on docker-agent2
-    steps {
-        script {
-            docker.withRegistry('', DOCKER_PASS) {
-                def docker_image = docker.build("${IMAGE_NAME}")
-                docker_image.push("${IMAGE_TAG}")
-                docker_image.push("latest")
-            }
-        }
-    }
-}
+    		agent { label 'docker-agent2' }  // 👈 Run this stage only on docker-agent2
+    			steps {
+        			script {
+            				docker.withRegistry('', env.DOCKER_CREDENTIALS) {
+                			def docker_image = docker.build("${IMAGE_NAME}")
+                			docker_image.push("${IMAGE_TAG}")
+                			docker_image.push("latest")
+            				}
+        			}
+    			}
+		}
 
 
 	    
