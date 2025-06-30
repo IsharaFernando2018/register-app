@@ -196,18 +196,31 @@ pipeline {
  //                }
  //            }
  //       }
+	 //    stage("Build & Push Docker Image") {
+  //   		agent { label 'docker-agent2' }  // 👈 Run this stage only on docker-agent2
+  //   			steps {
+  //       			script {
+  //           				docker.withRegistry('', env.DOCKER_CREDENTIALS) {
+  //               			def docker_image = docker.build("${IMAGE_NAME}")
+  //               			docker_image.push("${IMAGE_TAG}")
+  //               			docker_image.push("latest")
+  //           				}
+  //       			}
+  //   			}
+		// }
 	    stage("Build & Push Docker Image") {
-    		agent { label 'docker-agent2' }  // 👈 Run this stage only on docker-agent2
+    		agent { label 'docker-agent2' }
     			steps {
         			script {
             				docker.withRegistry('', env.DOCKER_CREDENTIALS) {
-                			def docker_image = docker.build("${IMAGE_NAME}")
-                			docker_image.push("${IMAGE_TAG}")
+                			def docker_image = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                			docker_image.push()
                 			docker_image.push("latest")
             				}
-        			}
+        			}		
     			}
-		}
+	}
+
 
 
 	    
